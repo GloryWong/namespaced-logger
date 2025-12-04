@@ -1,0 +1,84 @@
+{
+  "name": "namespaced-logger",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Small, clean, zero-dependency, namespace-aware logger with env-based enablement and pluggable transports.",
+  "author": {
+    "name": "Robert Wang",
+    "email": "glorywong1001@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/GloryWong/namespaced-logger#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GloryWong/namespaced-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GloryWong/namespaced-logger/issues"
+  },
+  "keywords": [
+    "log",
+    "logger",
+    "logging",
+    "level",
+    "namespaced",
+    "scoped",
+    "debug",
+    "console",
+    "transport",
+    "typescript",
+    "esm",
+    "node",
+    "deno",
+    "bun",
+    "browser"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx --watch src",
+    "build": "rimraf dist && tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "pnpm simple-git-hooks",
+    "prepublishOnly": "pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.19.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@tsconfig/node20": "^20.1.8",
+    "@types/node": "^20.19.25",
+    "eslint": "^9.39.1",
+    "lint-staged": "^15.5.2",
+    "rimraf": "^6.1.2",
+    "simple-git-hooks": "^2.13.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged && pnpm type-check && pnpm test",
+    "commit-msg": "pnpm commitlint --edit ${1}"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,mts,cts}": "pnpm lint:fix"
+  }
+}
