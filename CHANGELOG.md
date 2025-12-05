@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/GloryWong/namespaced-logger/compare/v1.0.1...v1.0.2) (2025-12-05)
+
+
+### Bug Fixes
+
+* **console transport:** avoid console calls being dropped by bundlers ([628762d](https://github.com/GloryWong/namespaced-logger/commit/628762d678d3276cda39b204a62e2ac82a86e315))
+
 ## [1.0.1](https://github.com/GloryWong/namespaced-logger/compare/v1.0.0...v1.0.1) (2025-12-05)
 
 
