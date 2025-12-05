@@ -3,9 +3,9 @@
  * messages while preserving any unused arguments.
  *
  * Supported tokens:
- * - `%s`: Convert the next argument to a string.
- * - `%d`: Convert the next argument to a number and then string.
- * - `%o`: JSON-stringify the next argument.
+ * - `%s`: Convert placeholder substitution to a string.
+ * - `%d`: Convert placeholder substitution to a number and then string.
+ * - `%j`: JSON-stringify the next argument.
  * - `%%`: Escaped percent sign, results in a literal `%`.
  *
  * Any extra arguments that are not consumed by placeholders are
@@ -33,7 +33,7 @@ export function formatArgs(
 
   let idx = 0
 
-  const str = first.replace(/%[sdjo%]/g, (token) => {
+  const str = first.replace(/%[sdj%]/g, (token) => {
     if (token === '%%') {
       return '%'
     }
@@ -45,7 +45,7 @@ export function formatArgs(
         return String(arg)
       case '%d':
         return typeof arg === 'number' ? String(arg) : Number(arg).toString()
-      case '%o':
+      case '%j':
         try {
           return JSON.stringify(arg)
         }

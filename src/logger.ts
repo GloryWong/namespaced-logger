@@ -1,6 +1,5 @@
-import type { BUILTIN_TRANSPORT_NAMES } from './constants.js'
 import type { LogEvent, LogLevel, Transport } from './types.js'
-import { LEVEL_ORDER } from './constants.js'
+import { BUILTIN_TRANSPORT_NAMES, LEVEL_ORDER } from './constants.js'
 import { createConsoleTransport } from './createConsoleTransport.js'
 import {
   detectEnabledNamespacesFromEnv,
@@ -43,7 +42,7 @@ export class Logger {
     const disableBuiltinTransports = options?.disableBuiltinTransports ?? []
     const transports: Transport[] = []
 
-    if (!disableBuiltinTransports.includes('console')) {
+    if (!disableBuiltinTransports.includes(BUILTIN_TRANSPORT_NAMES.console)) {
       transports.push(createConsoleTransport())
     }
 

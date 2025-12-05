@@ -51,7 +51,7 @@ log.info('App initialized!')
 const serverLog = log.child('server')
 serverLog.info('server starting on port %d', 3000)
 serverLog.warn('deprecated option %s used', '--foo')
-serverLog.error('unexpected error: %o', { code: 'E_FAIL', retry: false })
+serverLog.error('unexpected error: %j', { code: 'E_FAIL', retry: false })
 
 const dbLog = log.child('db')
 dbLog.debug('connecting to database at %s', 'localhost:5432')
@@ -61,12 +61,12 @@ dbLog.info('database connected')
 Example output (colors in a TTY; simplified here):
 
 ```text
-[2025-12-05 02:03:15,345] INFO  app - App initialized!
-[2025-12-05 02:03:15,346] INFO  app:server - server starting on port 3000
-[2025-12-05 02:03:15,347] WARN  app:server - deprecated option --foo used
-[2025-12-05 02:03:15,348] ERROR app:server - unexpected error: {"code":"E_FAIL","retry":false}
-[2025-12-05 02:03:15,349] DEBUG app:db - connecting to database at localhost:5432
-[2025-12-05 02:03:15,350] INFO  app:db - database connected
+02:03:15.345 INFO  app - App initialized!
+02:03:15.346 INFO  app:server - server starting on port 3000
+02:03:15.347 WARN  app:server - deprecated option --foo used
+02:03:15.348 ERROR app:server - unexpected error: {"code":"E_FAIL","retry":false}
+02:03:15.349 DEBUG app:db - connecting to database at localhost:5432
+02:03:15.350 INFO  app:db - database connected
 ```
 
 ## API
@@ -76,7 +76,9 @@ Example output (colors in a TTY; simplified here):
 Create a namespaced logger instance.
 
 * `namespace`: The namespace for the logger (e.g., `"app"`).
-* `options` (optional): Configuration options for the logger, such as transports.
+* `options` (optional): Configuration options for the logger.
+  - `transports` (optional): Array of personalized transports to use.
+  - `disableBuiltinTransports` (optional): Array of built-in transport names to disable. For example, `['console']` disables the built-in console transport.
 
 A `Logger` instance exposes:
 
@@ -90,18 +92,35 @@ A `Logger` instance exposes:
 
 `namespaced-logger` supports basic printf-style formatting:
 - `%s` - String
-- `%d` - Number (integer or float)
-- `%o` - Object (inspects the object)
+- `%d` - Number
+- `%j` - JSON-stringify the next argument.
 - `%%` – escaped percent sign (literal %)
 
-When the first argument (`message`) is not a string, it’s treated as a plain value:
+Any extra arguments that are not consumed by placeholders in the first argument are preserved.
+When the first argument is not a string, it’s converted to a string, and all other arguments are preserved as extra arguments. In console, extra arguments are logged as they are after the formatted message.:
+
 ```ts
-log.info({ user: 'alice', action: 'login' })
+log.info('User %s logged in from %s', 'alice', '192.168.1.1')
+log.debug('Processing data: %j', { id: 123, value: 'test' })
+log.warn('Disk space low: %d%% remaining', 5)
+log.error('Unexpected error occurred: %s', 'Connection timed out')
+log.info('Server started on port %d', 8080)
+log.info('Simple message without formatting')
+log.info('Show %s', 'data', { event: 'user_login', user: 'alice' }) // Extra args preserved and logged as it is in console
+log.info({ event: 'user_login', user: 'alice' }, 'alice') // first arg not string
 ```
 
-print:
+Example output:
+
 ```text
-[2025-12-05 02:03:15,351] INFO  app - {"user":"alice","action":"login"}
+02:03:15.345 INFO  app - User alice logged in from 192.168.1.1
+02:03:15.346 DEBUG app - Processing data: {"id":123,"value":"test"}
+02:03:15.347 WARN  app - Disk space low: 5% remaining
+02:03:15.348 ERROR app - Unexpected error occurred: Connection timed out
+02:03:15.349 INFO  app - Server started on port 8080
+02:03:15.350 INFO  app - Simple message without formatting
+02:03:15.351 INFO  app - Show data { event: 'user_login', user: 'alice' }
+02:03:15.351 INFO  app - [object Object] alice
 ```
 
 ## Colors

@@ -34,10 +34,8 @@ export function createConsoleTransport(): Transport {
   return {
     name: BUILTIN_TRANSPORT_NAMES.console,
     log(event: LogEvent): void {
-      const { level, ns, fArg, pArgs, rArgs, ts } = event
+      const { level, ns, msg, rArgs, ts } = event
       const timeStr = formatTimestamp(ts)
-      const firstArg = fArg
-      const restArgs = [...pArgs, ...rArgs]
 
       const consoleFn = (...data: any[]) => {
         console[level](...data)
@@ -47,7 +45,7 @@ export function createConsoleTransport(): Transport {
 
       if (isBrowser) {
         const prefix
-          = `%c${timeStr} %c${levelFormatted} %c${ns} %c- %c${firstArg}`
+          = `%c${timeStr} %c${levelFormatted} %c${ns} %c- %c${msg}`
         const args: any[] = [
           prefix,
           'color: gray;',
@@ -55,7 +53,7 @@ export function createConsoleTransport(): Transport {
           'color: inherit; font-weight: bold;',
           'color: gray;',
           'color: inherit;',
-          ...restArgs,
+          ...rArgs,
         ]
 
         consoleFn(...args)
@@ -64,14 +62,14 @@ export function createConsoleTransport(): Transport {
         const lvlColor = levelColorsNode[level]
         const grayColor = '\x1B[90m'
 
-        const prefix = `${grayColor}${timeStr}${resetNode} ${lvlColor}${levelFormatted}${resetNode} ${boldNode}${ns}${resetNode} ${grayColor}-${resetNode} ${firstArg}`
+        const prefix = `${grayColor}${timeStr}${resetNode} ${lvlColor}${levelFormatted}${resetNode} ${boldNode}${ns}${resetNode} ${grayColor}-${resetNode} ${msg}`
 
-        consoleFn(prefix, ...restArgs)
+        consoleFn(prefix, ...rArgs)
       }
       else {
         consoleFn(
-          `${timeStr} ${levelFormatted} ${ns} - ${firstArg}`,
-          ...restArgs,
+          `${timeStr} ${levelFormatted} ${ns} - ${msg}`,
+          ...rArgs,
         )
       }
     },
