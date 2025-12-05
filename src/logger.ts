@@ -82,15 +82,15 @@ export class Logger {
       return
 
     const [first, ...rest] = allArgs
-    const { message, restArgs } = formatArgs(first, rest)
+    const { message, placeholderArgs, restArgs } = formatArgs(first, rest)
 
     const event: LogEvent = {
-      timestamp: new Date(),
+      ts: new Date(),
       level,
-      namespace: this.namespace,
-      message,
-      restArgs,
-      allArgs,
+      ns: this.namespace,
+      msg: message,
+      pArgs: placeholderArgs,
+      rArgs: restArgs,
     }
 
     for (const transport of this.config.transports) {

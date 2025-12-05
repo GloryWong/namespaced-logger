@@ -20,7 +20,7 @@ export interface LogEvent {
   /**
    * Timestamp at which the log event was created.
    */
-  timestamp: Date
+  ts: Date
 
   /**
    * Log level of the event.
@@ -31,25 +31,25 @@ export interface LogEvent {
    * Namespace of the logger that emitted the event. Namespaces are
    * hierarchical, e.g. "app:db:queries".
    */
-  namespace: string
+  ns: string
 
   /**
    * Formatted message string produced by placeholder substitution
    * over the original arguments.
    */
-  message: string
+  msg: string
+
+  /**
+   * Arguments that were substituted into the message.
+   */
+  pArgs: unknown[]
 
   /**
    * Remaining arguments that were not substituted into the message.
    * These are useful for transports that want to preserve full
    * structured context, stack traces, or additional metadata.
    */
-  restArgs: unknown[]
-
-  /**
-   * All raw arguments
-   */
-  allArgs: unknown[]
+  rArgs: unknown[]
 }
 
 /**

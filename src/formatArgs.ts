@@ -21,10 +21,11 @@
 export function formatArgs(
   first: unknown,
   rest: unknown[],
-): { message: string, restArgs: unknown[] } {
+): { message: string, placeholderArgs: unknown[], restArgs: unknown[] } {
   if (typeof first !== 'string') {
     return {
       message: String(first),
+      placeholderArgs: [],
       restArgs: rest,
     }
   }
@@ -55,10 +56,9 @@ export function formatArgs(
     }
   })
 
-  const remaining = idx >= rest.length ? [] : rest.slice(idx)
-
   return {
     message: str,
-    restArgs: remaining,
+    placeholderArgs: rest.slice(0, idx),
+    restArgs: idx >= rest.length ? [] : rest.slice(idx),
   }
 }
