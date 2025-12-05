@@ -1,7 +1,7 @@
 {
   "name": "namespaced-logger",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Small, clean, zero-dependency, namespace-aware logger with env-based enablement and pluggable transports.",
   "author": {
     "name": "Robert Wang",
