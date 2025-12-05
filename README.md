@@ -45,9 +45,7 @@ yarn add namespaced-logger
 ```ts
 import { createLogger } from 'namespaced-logger'
 
-const log = createLogger('app', {
-  level: 'debug' // optional, defaults to 'info'
-})
+const log = createLogger('app')
 log.info('App initialized!')
 
 const serverLog = log.child('server')
@@ -138,7 +136,7 @@ In non‑TTY environments (piped to a file, many CI systems, etc.), colors are a
 
 You can control which loggers are enabled via the `NAMESPACED_LOGGER_ENABLE` environment variable. It supports glob-style patterns to match namespaces:
 - `'*'` enables loggers of all namespaces.
-- `'[]'` disables all loggers.
+- `''` (empty string) disables all loggers.
 - `'app1,app2'` enables loggers for the specified namespaces app1 and app2 only.
 
 ### Log levels

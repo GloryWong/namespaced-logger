@@ -89,7 +89,7 @@ export function detectLevel(defaultLevel: LogLevel = 'info'): LogLevel {
  */
 export function detectEnabledNamespacesFromEnv(): string[] | null {
   const raw = readConfigString(ENV_NAMESPACED_LOGGER_ENABLE)
-  if (raw == null)
+  if (raw === null || raw === undefined)
     return null
 
   if (!raw.trim())
