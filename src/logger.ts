@@ -82,13 +82,14 @@ export class Logger {
       return
 
     const [first, ...rest] = allArgs
-    const { message, placeholderArgs, restArgs } = formatArgs(first, rest)
+    const { message, firstArg, placeholderArgs, restArgs } = formatArgs(first, rest)
 
     const event: LogEvent = {
       ts: new Date(),
       level,
       ns: this.namespace,
       msg: message,
+      fArg: firstArg,
       pArgs: placeholderArgs,
       rArgs: restArgs,
     }

@@ -21,6 +21,7 @@ export function createConsoleTransport(): Transport {
     warn: '\x1B[33m', // yellow
     error: '\x1B[31m', // red
   }
+  const boldNode = '\x1B[1m'
   const resetNode = '\x1B[0m'
 
   const levelColorsBrowser: Record<LogLevel, string> = {
@@ -33,9 +34,10 @@ export function createConsoleTransport(): Transport {
   return {
     name: BUILTIN_TRANSPORT_NAMES.console,
     log(event: LogEvent): void {
-      const { level, namespace, allArgs, timestamp } = event
-      const timeStr = formatTimestamp(timestamp)
-      const [firstArg, ...restArgs] = allArgs
+      const { level, ns, fArg, pArgs, rArgs, ts } = event
+      const timeStr = formatTimestamp(ts)
+      const firstArg = fArg
+      const restArgs = [...pArgs, ...rArgs]
 
       const consoleFn = (...data: any[]) => {
         console[level](...data)
@@ -45,12 +47,13 @@ export function createConsoleTransport(): Transport {
 
       if (isBrowser) {
         const prefix
-          = `%c[${timeStr}] %c${levelFormatted} %c${namespace} %c- ${firstArg}`
+          = `%c${timeStr} %c${levelFormatted} %c${ns} %c- %c${firstArg}`
         const args: any[] = [
           prefix,
           'color: gray;',
           levelColorsBrowser[level],
-          'color: inherit;',
+          'color: inherit; font-weight: bold;',
+          'color: gray;',
           'color: inherit;',
           ...restArgs,
         ]
@@ -59,15 +62,15 @@ export function createConsoleTransport(): Transport {
       }
       else if (isNodeLike) {
         const lvlColor = levelColorsNode[level]
-        const timeColor = '\x1B[90m' // gray
+        const grayColor = '\x1B[90m'
 
-        const prefix = `${timeColor}[${timeStr}]${resetNode} ${lvlColor}${levelFormatted}${resetNode} ${namespace} - ${firstArg}`
+        const prefix = `${grayColor}${timeStr}${resetNode} ${lvlColor}${levelFormatted}${resetNode} ${boldNode}${ns}${resetNode} ${grayColor}-${resetNode} ${firstArg}`
 
         consoleFn(prefix, ...restArgs)
       }
       else {
         consoleFn(
-          `[${timeStr}] ${levelFormatted} ${namespace} - ${firstArg}`,
+          `${timeStr} ${levelFormatted} ${ns} - ${firstArg}`,
           ...restArgs,
         )
       }

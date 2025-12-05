@@ -34,8 +34,8 @@ describe('transports', () => {
         name: 'mock',
         enabled: true,
         level: 'debug',
-        log({ namespace, level }) {
-          spyFn(`${namespace} ${level}`)
+        log({ ns, level }) {
+          spyFn(`${ns} ${level}`)
         },
       }],
     })
@@ -58,8 +58,8 @@ describe('transports', () => {
         name: 'mock',
         enabled: true,
         level: 'debug',
-        log({ namespace, level }) {
-          spyFn(`${namespace} ${level}`)
+        log({ ns, level }) {
+          spyFn(`${ns} ${level}`)
         },
       }],
     })

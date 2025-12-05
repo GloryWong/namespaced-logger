@@ -15,6 +15,8 @@ export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
  *
  * Transports receive this structure and can decide how to persist,
  * display, or forward the event.
+ *
+ * `fArg` + `pArgs` + `rArgs` correspond to the original arguments.
  */
 export interface LogEvent {
   /**
@@ -40,7 +42,12 @@ export interface LogEvent {
   msg: string
 
   /**
-   * Arguments that were substituted into the message.
+   * The first argument passed to the log method.
+   */
+  fArg: unknown
+
+  /**
+   * Placeholder arguments that were substituted into the message.
    */
   pArgs: unknown[]
 

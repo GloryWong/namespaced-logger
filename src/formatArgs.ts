@@ -21,10 +21,11 @@
 export function formatArgs(
   first: unknown,
   rest: unknown[],
-): { message: string, placeholderArgs: unknown[], restArgs: unknown[] } {
+): { message: string, firstArg: unknown, placeholderArgs: unknown[], restArgs: unknown[] } {
   if (typeof first !== 'string') {
     return {
       message: String(first),
+      firstArg: first,
       placeholderArgs: [],
       restArgs: rest,
     }
@@ -58,6 +59,7 @@ export function formatArgs(
 
   return {
     message: str,
+    firstArg: first,
     placeholderArgs: rest.slice(0, idx),
     restArgs: idx >= rest.length ? [] : rest.slice(idx),
   }

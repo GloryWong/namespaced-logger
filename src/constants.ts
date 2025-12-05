@@ -13,7 +13,7 @@ export const LEVEL_ORDER: Record<LogLevel, number> = {
 }
 
 export const BUILTIN_TRANSPORT_NAMES = {
-  console: 'console',
+  console: 'builtin-console',
 } as const
 
 export const ENV_NAMESPACED_LOGGER_LEVEL = 'NAMESPACED_LOGGER_LEVEL'
