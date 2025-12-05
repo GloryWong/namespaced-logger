@@ -1,8 +1,21 @@
-/* eslint-disable no-console */
 import type { LogEvent, LogLevel, Transport } from './types.js'
 import { BUILTIN_TRANSPORT_NAMES } from './constants.js'
 import { isBrowser, isNodeLike } from './env.js'
 import { formatTimestamp } from './formatTimestamp.js'
+
+// * Indirect console calls, to avoid being dropped by bundlers *
+
+const globalConsole: Console | undefined
+  = typeof console !== 'undefined' ? console : undefined
+
+function writeToConsole(level: LogLevel, ...args: unknown[]) {
+  if (!globalConsole)
+    return
+  const fn: unknown = (globalConsole as any)[level] ?? globalConsole.log
+  if (typeof fn === 'function') {
+    fn.apply(globalConsole, args as any[])
+  }
+}
 
 /**
  * Create a console-based transport that writes log events to the
@@ -38,7 +51,7 @@ export function createConsoleTransport(): Transport {
       const timeStr = formatTimestamp(ts)
 
       const consoleFn = (...data: any[]) => {
-        console[level](...data)
+        writeToConsole(level, ...data)
       }
 
       const levelFormatted = level.toUpperCase().padEnd(5, ' ')
