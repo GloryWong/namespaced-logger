@@ -63,7 +63,7 @@
     "@antfu/eslint-config": "^4.19.0",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@tsconfig/node20": "^20.1.9",
+    "@tsconfig/node22": "^22.0.0",
     "@types/node": "^20.19.33",
     "eslint": "^9.39.2",
     "lint-staged": "^15.5.2",
